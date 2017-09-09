@@ -32,15 +32,10 @@
    limitations under the License.
 '''
 
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 from configparser import SafeConfigParser
 import os
 import json
 import requests
-from selenium.common.exceptions import TimeoutException
 
 config = SafeConfigParser()
 config.read(os.path.join(os.path.abspath(os.path.dirname(__file__)), 'config.cfg'))
@@ -52,46 +47,7 @@ password = config.get('Questrade', 'password', vars={'password':''})
 
 
 def login():
-    browser = webdriver.Chrome(os.path.join(os.path.abspath(os.path.dirname(__file__)),'chromedriver.exe'))
-
-    token = {}
-    browser.get(authorization_url)
-    try:
-        # Wait on the login Submit button to appear
-        WebDriverWait(browser, 30).until(
-            EC.visibility_of_element_located((By.ID, 'ctl00_DefaultContent_btnContinue'))
-        )
-        
-        # Find the username and password input fields
-        inputElem_username = browser.find_element_by_id('ctl00_DefaultContent_txtUsername')
-        inputElem_password = browser.find_element_by_id('ctl00_DefaultContent_txtPassword')
-    
-        # Populate the username and input fields
-        inputElem_username.send_keys(username)
-        inputElem_password.send_keys(password)
-        
-    
-        # Wait on the Authorization Allow button to appear
-        WebDriverWait(browser, 60).until(
-            EC.visibility_of_element_located((By.ID, 'ctl00_DefaultContent_btnAllow'))
-        )
-    
-        # Wait on the Authentication Token JSON to appear
-        jsonElement = WebDriverWait(browser, 30).until(
-            EC.presence_of_element_located((By.TAG_NAME, 'pre'))
-        )
-        
-        token = json.loads(jsonElement.text)
-        __store_token__(jsonElement.text)
-        
-        
-    except TimeoutException:
-        print('Time expired while attempting to login')
-        
-    finally:
-        browser.quit()
-        
-        return token
+    return None
 
 
 def refresh_token(refresh_token):
@@ -108,7 +64,7 @@ def refresh_token(refresh_token):
 
        
 def __store_token__(jsonTxt):
-    with open(os.path.join(os.path.expanduser('~'), 'questrade_token.json'), 'w') as f:
+    with open(os.path.join(os.path.expanduser('~'), '.questrade_token.json'), 'w') as f:
             f.write(jsonTxt)
 
 

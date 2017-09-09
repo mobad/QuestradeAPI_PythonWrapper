@@ -41,7 +41,7 @@ __api_ops__ = {
 def symbol(id_):
     '''
     Retrieves detailed information about one symbol.
-    
+
     @see: http://www.questrade.com/api/documentation/rest-operations/market-calls/symbols-id
     '''
     return api_utils.call_api(__api_ops__['symbol'].format(id_))
@@ -51,7 +51,7 @@ def symbolIds(ids):
     '''
     Retrieves detailed information about one or more symbols.
     @note: ids must be a list or comma separated string
-    
+
     @see:  http://www.questrade.com/api/documentation/rest-operations/market-calls/symbols-id
     '''
     syms = ''
@@ -61,7 +61,7 @@ def symbolIds(ids):
         syms = syms[:-1]  # remove last ,
     else:
         syms = ids
-        
+
     params = {'ids': syms}
     return api_utils.call_api(__api_ops__['symbols'], params)
 
@@ -70,7 +70,7 @@ def symbolNames(names):
     '''
     Retrieves detailed information about one or more symbols.
     @note: names must be a list or comma separated string
-    
+
     @see:  http://www.questrade.com/api/documentation/rest-operations/market-calls/symbols-id
     '''
     syms = ''
@@ -80,7 +80,7 @@ def symbolNames(names):
         syms = syms[:-1]  # remove last ,
     else:
         syms = names
-        
+
     params = {'names': syms}
     return api_utils.call_api(__api_ops__['symbols'], params)
 
@@ -88,7 +88,7 @@ def symbolNames(names):
 def symbols_search(prefix, offset='0'):
     '''
     Retrieves symbol(s) using several search criteria.
-    
+
     @see: http://www.questrade.com/api/documentation/rest-operations/market-calls/symbols-search
     '''
     params = {'prefix': prefix,
@@ -99,7 +99,7 @@ def symbols_search(prefix, offset='0'):
 def symbols_options(id_):
     '''
     Retrieves an option chain for a particular underlying symbol.
-    
+
     @see: http://www.questrade.com/api/documentation/rest-operations/market-calls/symbols-id-options
     '''
     return api_utils.call_api(__api_ops__['options'].format(id_))
@@ -108,7 +108,7 @@ def symbols_options(id_):
 def markets():
     '''
     Retrieves information about supported markets.
-    
+
     @see: http://www.questrade.com/api/documentation/rest-operations/market-calls/markets
     '''
     return api_utils.call_api(__api_ops__['markets'])
@@ -117,7 +117,7 @@ def markets():
 def markets_quote(id_):
     '''
     Retrieves a single Level 1 market data quote for one symbol.
-    
+
     @see: http://www.questrade.com/api/documentation/rest-operations/market-calls/markets-quotes-id
     '''
     return api_utils.call_api(__api_ops__['quote'].format(id_))
@@ -127,7 +127,7 @@ def markets_quotes(ids):
     '''
     Retrieves a single Level 1 market data quote for one or more symbols.
     @note: ids must be a list or comma separated string
-    
+
     @see: http://www.questrade.com/api/documentation/rest-operations/market-calls/markets-quotes-id
     '''
     syms = []
@@ -135,28 +135,28 @@ def markets_quotes(ids):
         syms = syms.split(',')
     else:
         syms = ids
-    
+
     result = {'quotes': []}
-    
+
     arry_chunks = __array_chunks(syms, 200)
     for ids_array in arry_chunks:
         ids_str = ''
         for s in ids_array:
             ids_str += str(s) + ','
         ids_str = ids_str[:-1]  # remove last ,
-        
+
         params = {'ids': ids_str}
         r = api_utils.call_api(__api_ops__['quotes'], params)
         if 'quotes' in r:
             result['quotes'] = result['quotes'] + r.get('quotes')
-    
+
     return result
 
 
 def markets_quotes_options(option_id_filters, ids):
     '''
     Retrieves a single Level 1 market data quote and Greek data for one or more option symbols.
-    
+
     @see: http://www.questrade.com/api/documentation/rest-operations/market-calls/markets-quotes-options
     @todo: Need to finish implementation
     '''
@@ -168,7 +168,7 @@ def markets_quotes_options(option_id_filters, ids):
 def markets_quotes_strategies():
     '''
     Retrieve a calculated L1 market data quote for a single or many multi-leg strategies
-    
+
     @see: http://www.questrade.com/api/documentation/rest-operations/market-calls/markets-quotes-strategies
     @todo: Need to finish implementation
     '''
@@ -179,7 +179,7 @@ def markets_candles(id_, start_time=None, end_time=None, interval=None):
     '''
     Retrieves historical market data in the form of OHLC candlesticks for a specified symbol.
     This call is limited to returning 2,000 candlesticks in a single response.
-    
+
     @see: http://www.questrade.com/api/documentation/rest-operations/market-calls/markets-candles-id
     '''
     if start_time == None:
@@ -188,7 +188,7 @@ def markets_candles(id_, start_time=None, end_time=None, interval=None):
         end_time = datetime_utils.iso_now()
     if interval == None:
         interval = enumerations.HistoricalDataGranularity.FiveMinutes
-    
+
     params = {'startTime': start_time,
               'endTime': end_time,
               'interval': interval}

@@ -82,7 +82,7 @@ def call_api(api, params=None, http_verb="GET"):
         if http_verb == "GET":
             r = requests.get(uri, headers=headers, params=params)
         elif http_verb == "POST":
-            r = requests.post(uri, headers=headers, params=params)
+            r = requests.post(uri, headers=headers, json=params)
         response = r.json()
             
     except ValueError as e:

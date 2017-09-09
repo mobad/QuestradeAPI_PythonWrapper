@@ -108,6 +108,23 @@ def accounts_orders(id_, start_time=None, end_time=None, state_filter=None, orde
         
     return api_utils.call_api(__api_ops__['orders'].format(id_), params)
 
+def accounts_place_order(id_, symbolId, quantity, askPrice):   
+    params = {
+        "accountNumber" : id_,
+        "symbolId": symbolId,
+        "quantity": quantity,
+        "limitPrice": askPrice,
+        "isAllOrNone": False,
+        "isAnonymous": False,
+        "orderType": "Limit",
+        "timeInForce": "Day",
+        "action": "Buy",
+        "primaryRoute": "AUTO",
+        "secondaryRoute": "AUTO"
+    }
+        
+    return api_utils.call_api(__api_ops__['orders'].format(id_), params, "POST")
+
 
 def accounts_activities(id_, start_time=None, end_time=None):
     '''

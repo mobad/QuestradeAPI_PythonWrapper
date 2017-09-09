@@ -8,11 +8,11 @@
 
 @note: The locally stored token is assumed to be located in the user's home directory
     under the filename 'questrade_token.json'.
-    
+
     Windows:    C:\\Users\\<username>\\questrade_token.json
     OS X:       /Users/<username>/questrade_token.json
     Linux:      /home/<username>/questrade_token.json
-    
+
 @copyright: 2016
 @author: Peter Cinat
 @license: Licensed under the Apache License, Version 2.0 (the "License");
@@ -40,12 +40,12 @@ def get_token(new=False):
         webbrowser.get('firefox').open_new_tab('https://login.questrade.com/Signin.aspx?ReturnUrl=%2fAPIAccess%2f')
     else:
         try:
-            with open(os.path.join(os.path.expanduser('~'), 'questrade_token.json')) as f:
+            with open(os.path.join(os.path.expanduser('~'), '.questrade_token.json')) as f:
                 jsonStr = f.read()
                 token = json.loads(jsonStr)
         except IOError:
             token = None
-    
+
     if not is_valid_token(token):
         token = None
 
@@ -58,20 +58,20 @@ def refresh_token(refresh_token):
 
 
 def delete_token():
-    os.remove(os.path.join(os.path.expanduser('~'), 'questrade_token.json'))
+    os.remove(os.path.join(os.path.expanduser('~'), '.questrade_token.json'))
 
 
 def get_token_value(key):
     token = get_token()
-    
+
     if token == None:
         return None
-    
+
     try:
         value = token[key]
     except KeyError:
         value = None
-        
+
     return value
 
 
@@ -106,7 +106,7 @@ def get_token_type(token=None):
 def is_valid_token(token):
     if token == None:
         return False
-    
+
     is_valid = False
     try:
         token['access_token']
@@ -125,11 +125,11 @@ def is_token_expired(token):
         expires_in = get_token_value('expires_in')
     else:
         expires_in = token['expires_in']
-    
+
     if expires_in == None:
         return True
     else:
-        last_modified = os.stat(os.path.join(os.path.expanduser('~'), 'questrade_token.json')).st_mtime
+        last_modified = os.stat(os.path.join(os.path.expanduser('~'), '.questrade_token.json')).st_mtime
         return time.time() > (last_modified + expires_in)
 
 

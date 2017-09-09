@@ -34,7 +34,7 @@ def datetime_delta_days(d1, d2):
 
 def get_secs_since_epoch():
     epoch = datetime.utcfromtimestamp(0)
-    now = datetime.datetime.utcnow()
+    now = datetime.utcnow()
     delta = now - epoch
     return delta.total_seconds()
 
